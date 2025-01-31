@@ -17,13 +17,25 @@ const InputModal = ({
   setModalVisible,
   todoInputValue,
   setTodoInputValue,
+  handleAddTodo,
+  todos,
 }) => {
   const handleCloseModal = () => {
     setModalVisible(false);
   };
   const handleSubmit = () => {
-    alert("Submitted!");
+    handleAddTodo({
+      title: todoInputValue,
+      date: new Date().toUTCString(),
+      key: `${
+        (todos[todos.length - 1] &&
+          parseInt(todos[todos.length - 1].key) + 1) ||
+        1
+      }`,
+    });
+    setTodoInputValue("");
   };
+
   return (
     <>
       <ModalButton onPress={() => setModalVisible(true)}>

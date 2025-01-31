@@ -18,21 +18,33 @@ const InputModal = ({
   todoInputValue,
   setTodoInputValue,
   handleAddTodo,
+  todoToBeEdited,
+  setTodoToBeEdited,
+  handleEditTodo,
   todos,
 }) => {
   const handleCloseModal = () => {
     setModalVisible(false);
+    setTodoInputValue("");
   };
   const handleSubmit = () => {
-    handleAddTodo({
-      title: todoInputValue,
-      date: new Date().toUTCString(),
-      key: `${
-        (todos[todos.length - 1] &&
-          parseInt(todos[todos.length - 1].key) + 1) ||
-        1
-      }`,
-    });
+    if (!todoToBeEdited) {
+      handleAddTodo({
+        title: todoInputValue,
+        date: new Date().toUTCString(),
+        key: `${
+          (todos[todos.length - 1] &&
+            parseInt(todos[todos.length - 1].key) + 1) ||
+          1
+        }`,
+      });
+    } else {
+      handleEditTodo({
+        title: todoInputValue,
+        date: todoToBeEdited.date,
+        key: todoToBeEdited.key,
+      });
+    }
     setTodoInputValue("");
   };
 

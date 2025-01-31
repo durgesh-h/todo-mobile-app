@@ -11,7 +11,7 @@ import {
 } from "../styles/homeStyles";
 import { Entypo } from "@expo/vector-icons";
 
-const ListItems = ({ todos, setTodos }) => {
+const ListItems = ({ todos, setTodos, handleTriggerEdit }) => {
   const [swipedRow, setSwipedRow] = useState(null);
   const handleDeleteTodo = (rowMap, rowKey) => {
     const newTodos = [...todos];
@@ -31,7 +31,12 @@ const ListItems = ({ todos, setTodos }) => {
             const RowText =
               data.item.key == swipedRow ? SwipedTodoText : TodoText;
             return (
-              <ListView underlayColor={colors.primary} onPress={() => {}}>
+              <ListView
+                underlayColor={colors.primary}
+                onPress={() => {
+                  handleTriggerEdit(data.item);
+                }}
+              >
                 <>
                   <RowText>{data.item.title}</RowText>
                   <TodoText>{data.item.date}</TodoText>

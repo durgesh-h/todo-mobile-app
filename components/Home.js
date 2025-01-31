@@ -3,35 +3,27 @@ import React, { useState } from "react";
 import Header from "./Header";
 import ListItems from "./ListItems";
 import InputModal from "./InputModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Home = () => {
-  const initialTodos = [
-    {
-      title: "Hello",
-      date: "Fri, 08 Jan 2021 16:32:11 GMT",
-      key: "1",
-    },
-    {
-      title: "Hi",
-      date: "Fri, 08 Jan 2021 16:32:11 GMT",
-      key: "2",
-    },
-    {
-      title: "byee",
-      date: "Fri, 08 Jan 2021 16:32:11 GMT",
-      key: "3",
-    },
-  ];
-  const [todos, setTodos] = useState(initialTodos);
+const Home = ({ todos, setTodos }) => {
   const handleClearTodos = () => {
-    setTodos([]);
+    AsyncStorage.setItem("storedTodos", JSON.stringify([]))
+      .then(() => {
+        setTodos([]);
+      })
+      .catch((error) => console.log(error));
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [todoInputValue, setTodoInputValue] = useState();
   const handleAddTodo = (todo) => {
     const newTodos = [...todos, todo];
-    setTodos(newTodos);
-    setModalVisible(false);
+
+    AsyncStorage.setItem("storedTodos", JSON.stringify(newTodos))
+      .then(() => {
+        setTodos(newTodos);
+        setModalVisible(false);
+      })
+      .catch((error) => console.log(error));
   };
   const [todoToBeEdited, setTodoToBeEdited] = useState(null);
   const handleTriggerEdit = (item) => {
@@ -43,9 +35,14 @@ const Home = () => {
     const newTodos = [...todos];
     const todoIndex = todos.findIndex((todo) => todo.key === editedTodo.key);
     newTodos.splice(todoIndex, 1, editedTodo);
-    setTodos(newTodos);
-    setTodoToBeEdited(null);
-    setModalVisible(false);
+
+    AsyncStorage.setItem("storedTodos", JSON.stringify(newTodos))
+      .then(() => {
+        setTodos(newTodos);
+        setModalVisible(false);
+        setTodoToBeEdited(null);
+      })
+      .catch((error) => console.log(error));
   };
   return (
     <>

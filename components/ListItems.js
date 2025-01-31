@@ -10,6 +10,7 @@ import {
   TodoText,
 } from "../styles/homeStyles";
 import { Entypo } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ListItems = ({ todos, setTodos, handleTriggerEdit }) => {
   const [swipedRow, setSwipedRow] = useState(null);
@@ -19,7 +20,11 @@ const ListItems = ({ todos, setTodos, handleTriggerEdit }) => {
       todo.key === rowKey;
     });
     newTodos.splice(todoIndex, 1);
-    setTodos(newTodos);
+    AsyncStorage.setItem("storedTodos", JSON.stringify(newTodos))
+      .then(() => {
+        setTodos(newTodos);
+      })
+      .catch((error) => console.log(error));
   };
   return (
     <>
